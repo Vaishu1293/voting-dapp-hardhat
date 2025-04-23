@@ -1,0 +1,44 @@
+# Global
+node_modules/
+.env
+.DS_Store
+*.log
+npm-debug.log*
+
+# React Frontend
+/frontend/node_modules
+/frontend/.env
+/frontend/build
+/frontend/.cache
+/frontend/.next
+/frontend/.turbo
+/frontend/coverage
+/frontend/.eslintcache
+
+# Optional: Lock files (if you're using yarn/npm consistency, keep only one)
+yarn.lock
+package-lock.json
+
+# Tailwind/NextJS/PostCSS cache (optional)
+frontend/postcss.config.js
+frontend/tailwind.config.js
+
+# Hardhat Backend
+/cache
+/artifacts
+/coverage
+/coverage.json
+
+# Typechain generated files
+/typechain
+/typechain-types
+
+# Hardhat Ignition deployments
+ignition/deployments/chain-31337
+
+# VSCode
+.vscode/
+
+# OS-specific
+Thumbs.db
+*.swp
