@@ -1,58 +1,59 @@
-import React from 'react';
-import WalletConnect from './WalletConnect';
-import ThemeToggle from './ThemeToggle';
+"use client";
 
-interface NavbarProps {
-  activeTab: string;
-  setActiveTab: (tab: string) => void;
-}
+import { useState, useEffect } from "react";
+import WalletConnect from "@/components/WalletConnect";
+import { ethers } from "ethers";
 
-const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
+export default function Navbar() {
+  const [account, setAccount] = useState<string | null>(null);
+  const [theme, setTheme] = useState("dark");
+
+  const handleConnected = (account: string, provider: ethers.BrowserProvider) => {
+    console.log("Connected account inside Navbar:", account);
+    setAccount(account);
+  };
+
+  const toggleTheme = () => {
+    const newTheme = theme === "dark" ? "light" : "dark";
+    document.body.classList.toggle("light", newTheme === "light");
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+  };
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "dark";
+    document.body.classList.toggle("light", savedTheme === "light");
+    setTheme(savedTheme);
+  }, []);
+
   return (
-    <nav className="bg-gray-800 dark:bg-purple-100 text-white dark:text-gray-800 shadow-md border-b border-gray-700 dark:border-gray-300 px-6 py-4 sticky top-0 z-50 flex justify-between items-center">
-      <h1 className="text-xl font-bold text-red-400 dark:text-purple-700">Voting DApp</h1>
-      <ul className="flex gap-4 items-center">
-        <li>
-          <button
-            className={`nav-link ${activeTab === 'active' ? 'text-red-400 font-semibold' : ''}`}
-            onClick={() => setActiveTab('active')}
-          >
-            Active Polls
+    <nav className="navbar">
+      <a className="navbar-brand" href="#">Voting DApp</a>
+      <ul className="navbar-nav flex gap-4 items-center">
+        <li className="nav-item">
+          <a className="nav-link active" href="#home">Home</a>
+        </li>
+        <li className="nav-item">
+          <a className="nav-link" href="#create-poll">Create Poll</a>
+        </li>
+        <li className="nav-item">
+          <a className="nav-link" href="#my-votes">My Votes</a>
+        </li>
+        <li className="nav-item">
+          {account ? (
+            <span className="connected-address">
+              {account.slice(0, 6)}...{account.slice(-4)}
+            </span>
+          ) : (
+            <WalletConnect onConnected={handleConnected} />
+          )}
+        </li>
+        <li className="nav-item">
+          <button onClick={toggleTheme} className="theme-toggle-button">
+            {theme === "dark" ? "Light Mode" : "Dark Mode"}
           </button>
-        </li>
-        <li>
-          <button
-            className={`nav-link ${activeTab === 'past' ? 'text-red-400 font-semibold' : ''}`}
-            onClick={() => setActiveTab('past')}
-          >
-            Past Polls
-          </button>
-        </li>
-        <li>
-          <button
-            className={`nav-link ${activeTab === 'create' ? 'text-red-400 font-semibold' : ''}`}
-            onClick={() => setActiveTab('create')}
-          >
-            Create Poll
-          </button>
-        </li>
-        <li>
-          <button
-            className={`nav-link ${activeTab === 'votes' ? 'text-red-400 font-semibold' : ''}`}
-            onClick={() => setActiveTab('votes')}
-          >
-            My Votes
-          </button>
-        </li>
-        <li>
-          <WalletConnect />
-        </li>
-        <li>
-          <ThemeToggle />
         </li>
       </ul>
     </nav>
   );
-};
-
-export default Navbar;
+}

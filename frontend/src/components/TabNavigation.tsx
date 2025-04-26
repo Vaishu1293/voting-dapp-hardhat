@@ -1,30 +1,57 @@
-import React from 'react';
+"use client";
 
-type TabNavigationProps = {
-  activeTab: string;
-  setActiveTab: (tab: string) => void;
-};
+import { useState } from "react";
 
-const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, setActiveTab }) => {
-  const tabs = ["home", "past-polls", "create-poll", "my-votes"];
+type Tab = "active" | "past" | "create" | "myvotes";
+
+interface TabNavigationProps {
+  onTabChange: (tab: Tab) => void;
+}
+
+export default function TabNavigation({ onTabChange }: TabNavigationProps) {
+  const [activeTab, setActiveTab] = useState<Tab>("active");
+
+  const handleTabClick = (tab: Tab) => {
+    setActiveTab(tab);
+    onTabChange(tab);
+  };
 
   return (
-    <div className="flex justify-center border-b border-gray-600 py-2">
-      {tabs.map(tab => (
-        <button
-          key={tab}
-          onClick={() => setActiveTab(tab)}
-          className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors duration-200 ${
-            activeTab === tab
-              ? 'border-red-500 text-red-500'
-              : 'border-transparent text-gray-400 hover:text-red-400'
-          }`}
-        >
-          {tab.replace('-', ' ').replace(/^\w/, c => c.toUpperCase())}
-        </button>
-      ))}
+    <div className="tab-container">
+      <ul className="nav-tabs">
+        <li className="nav-item">
+          <button
+            className={`nav-link ${activeTab === "active" ? "active" : ""}`}
+            onClick={() => handleTabClick("active")}
+          >
+            Active Polls
+          </button>
+        </li>
+        <li className="nav-item">
+          <button
+            className={`nav-link ${activeTab === "past" ? "active" : ""}`}
+            onClick={() => handleTabClick("past")}
+          >
+            Past Polls
+          </button>
+        </li>
+        <li className="nav-item">
+          <button
+            className={`nav-link ${activeTab === "create" ? "active" : ""}`}
+            onClick={() => handleTabClick("create")}
+          >
+            Create Poll
+          </button>
+        </li>
+        <li className="nav-item">
+          <button
+            className={`nav-link ${activeTab === "myvotes" ? "active" : ""}`}
+            onClick={() => handleTabClick("myvotes")}
+          >
+            My Votes
+          </button>
+        </li>
+      </ul>
     </div>
   );
-};
-
-export default TabNavigation;
+}
