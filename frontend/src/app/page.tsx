@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import ClientWrapper from "@/components/ClientWrapper";
 import { ethers } from "ethers";
 import CreatePoll from "@/components/CreatePoll";
+import MyVotes from "@/components/MyVotes";
 
 export default function Home() {
   const [account, setAccount] = useState<string | null>(null);
@@ -81,10 +82,11 @@ export default function Home() {
 
 
           {activeSection === "my-votes" && (
-            <div className="text-center text-gray-400 max-w-2xl mx-auto mt-20 p-6 bg-gray-800 dark:bg-gray-100 rounded-lg shadow-lg">
-              <h2 className="text-2xl font-bold text-center mb-8 text-purple-400 dark:text-purple-700">Your Votes</h2>
-              📊 Coming Soon: View the polls you've participated in and your voting history secured on the blockchain.
-            </div>
+            // <div className="text-center text-gray-400 max-w-2xl mx-auto mt-20 p-6 bg-gray-800 dark:bg-gray-100 rounded-lg shadow-lg">
+            //   <h2 className="text-2xl font-bold text-center mb-8 text-purple-400 dark:text-purple-700">Your Votes</h2>
+            //   📊 Coming Soon: View the polls you've participated in and your voting history secured on the blockchain.
+            // </div>
+            <MyVotes/>
           )}
 
         </div>
