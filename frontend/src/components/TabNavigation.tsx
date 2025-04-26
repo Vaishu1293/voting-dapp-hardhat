@@ -7,9 +7,10 @@ interface TabNavigationProps {
 }
 
 export default function TabNavigation({ onTabChange }: TabNavigationProps) {
-  const [activeTab, setActiveTab] = useState("active");
+  const [activeTab, setActiveTab] = useState("all");
 
   const tabs = [
+    { id: "all", label: "All Polls" },
     { id: "active", label: "Active Polls" },
     { id: "past", label: "Past Polls" }
   ];
