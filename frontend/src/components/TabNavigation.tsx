@@ -2,56 +2,40 @@
 
 import { useState } from "react";
 
-type Tab = "active" | "past" | "create" | "myvotes";
-
 interface TabNavigationProps {
-  onTabChange: (tab: Tab) => void;
+  onTabChange: (tab: string) => void;
 }
 
 export default function TabNavigation({ onTabChange }: TabNavigationProps) {
-  const [activeTab, setActiveTab] = useState<Tab>("active");
+  const [activeTab, setActiveTab] = useState("active");
 
-  const handleTabClick = (tab: Tab) => {
-    setActiveTab(tab);
-    onTabChange(tab);
+  const tabs = [
+    { id: "active", label: "Active Polls" },
+    { id: "past", label: "Past Polls" }
+  ];
+
+  const handleTabClick = (tabId: string) => {
+    setActiveTab(tabId);
+    onTabChange(tabId);
   };
 
   return (
-    <div className="tab-container">
-      <ul className="nav-tabs">
-        <li className="nav-item">
+    <div className="flex justify-center mt-8">
+      <div className="flex space-x-4 border-b border-gray-700 dark:border-gray-300">
+        {tabs.map((tab) => (
           <button
-            className={`nav-link ${activeTab === "active" ? "active" : ""}`}
-            onClick={() => handleTabClick("active")}
+            key={tab.id}
+            onClick={() => handleTabClick(tab.id)}
+            className={`py-2 px-4 text-sm font-semibold transition-colors ${
+              activeTab === tab.id
+                ? "border-b-4 border-red-400 text-red-400"
+                : "text-gray-400 hover:text-white dark:hover:text-black"
+            }`}
           >
-            Active Polls
+            {tab.label}
           </button>
-        </li>
-        <li className="nav-item">
-          <button
-            className={`nav-link ${activeTab === "past" ? "active" : ""}`}
-            onClick={() => handleTabClick("past")}
-          >
-            Past Polls
-          </button>
-        </li>
-        <li className="nav-item">
-          <button
-            className={`nav-link ${activeTab === "create" ? "active" : ""}`}
-            onClick={() => handleTabClick("create")}
-          >
-            Create Poll
-          </button>
-        </li>
-        <li className="nav-item">
-          <button
-            className={`nav-link ${activeTab === "myvotes" ? "active" : ""}`}
-            onClick={() => handleTabClick("myvotes")}
-          >
-            My Votes
-          </button>
-        </li>
-      </ul>
+        ))}
+      </div>
     </div>
   );
 }
