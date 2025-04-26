@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import ClientWrapper from "@/components/ClientWrapper";
 import { ethers } from "ethers";
+import CreatePoll from "@/components/CreatePoll";
 
 export default function Home() {
   const [account, setAccount] = useState<string | null>(null);
@@ -67,12 +68,17 @@ export default function Home() {
             </>
           )}
 
-          {activeSection === "create-poll" && (
+          {/* {activeSection === "create-poll" && (
             <div className="text-center text-gray-400 max-w-2xl mx-auto mt-20 p-6 bg-gray-800 dark:bg-gray-100 rounded-lg shadow-lg">
               <h2 className="text-2xl font-bold text-center mb-8 text-purple-400 dark:text-purple-700">Create a New Poll</h2>
               🚀 Coming Soon: Create your own polls, set options, expiration time, and launch a new decentralized election!
             </div>
+          )} */}
+
+          {activeSection === "create-poll" && (
+            <CreatePoll />
           )}
+
 
           {activeSection === "my-votes" && (
             <div className="text-center text-gray-400 max-w-2xl mx-auto mt-20 p-6 bg-gray-800 dark:bg-gray-100 rounded-lg shadow-lg">

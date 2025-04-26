@@ -16,49 +16,52 @@ export default function Navbar({ onAccountChange }: { onAccountChange?: (account
   };
 
   const toggleTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
-    document.body.classList.toggle("light", newTheme === "light");
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
+    const body = document.body;
+    if (body.classList.contains("light")) {
+      body.classList.remove("light");
+      body.classList.add("dark"); // ⭐ add dark explicitly
+      setTheme("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      body.classList.remove("dark");
+      body.classList.add("light"); // ⭐ add light explicitly
+      setTheme("light");
+      localStorage.setItem("theme", "light");
+    }
   };
-
+  
+  
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "dark";
-    document.body.classList.toggle("light", savedTheme === "light");
+    const body = document.body;
+    body.classList.remove("light", "dark"); // clean previous
+    body.classList.add(savedTheme); // add proper class
     setTheme(savedTheme);
   }, []);
+  
+  
 
   return (
     <nav className="navbar">
       <a className="navbar-brand" href="#">Voting DApp</a>
       <ul className="navbar-nav flex gap-4 items-center">
-        <li className="nav-item">
-          <a
-            href="#home"
-            className={`nav-link ${activeLink === "home" ? "text-red-400 font-bold" : ""}`}
-            onClick={() => setActiveLink("home")}
-          >
-            Home
-          </a>
-        </li>
-        <li className="nav-item">
-          <a
-            href="#create-poll"
-            className={`nav-link ${activeLink === "create-poll" ? "text-red-400 font-bold" : ""}`}
-            onClick={() => setActiveLink("create-poll")}
-          >
-            Create Poll
-          </a>
-        </li>
-        <li className="nav-item">
-          <a
-            href="#my-votes"
-            className={`nav-link ${activeLink === "my-votes" ? "text-red-400 font-bold" : ""}`}
-            onClick={() => setActiveLink("my-votes")}
-          >
-            My Votes
-          </a>
-        </li>
+
+        {["home", "create-poll", "my-votes"].map((link) => (
+          <li className="nav-item" key={link}>
+            <a
+              href={`#${link}`}
+              className={`nav-link relative transition-all duration-300 ${
+                activeLink === link
+                  ? "text-red-400 font-bold after:absolute after:left-0 after:bottom-0 after:w-full after:h-0.5 after:bg-red-400 after:rounded-full"
+                  : "text-gray-400 hover:text-white dark:hover:text-black"
+              }`}
+              onClick={() => setActiveLink(link)}
+            >
+              {link === "home" ? "Home" : link === "create-poll" ? "Create Poll" : "My Votes"}
+            </a>
+          </li>
+        ))}
+
         <li className="nav-item">
           {account ? (
             <span className="connected-address">
@@ -68,11 +71,13 @@ export default function Navbar({ onAccountChange }: { onAccountChange?: (account
             <WalletConnect onConnected={handleConnected} />
           )}
         </li>
+
         <li className="nav-item">
           <button onClick={toggleTheme} className="theme-toggle-button">
             {theme === "dark" ? "Light Mode" : "Dark Mode"}
           </button>
         </li>
+
       </ul>
     </nav>
   );
