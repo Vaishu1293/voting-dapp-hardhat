@@ -3,7 +3,8 @@
 import { useState } from "react";
 import TabNavigation from "@/components/TabNavigation";
 import PollCard from "./PollCard";
-import Pagination from "@/components/Pagination"; // ⭐ import the new Pagination component
+import PollDetails from "@/components/PollDetails"; // ⭐ Import PollDetails component
+import Pagination from "@/components/Pagination"; // ⭐ import Pagination
 
 const dummyPolls = [
   { id: 1, title: "Favorite Color", status: "Active", expiration: "2025-05-31", numVoters: 12 },
@@ -19,12 +20,16 @@ export default function ClientWrapper() {
   const [currentTab, setCurrentTab] = useState("all");
   const [polls, setPolls] = useState(dummyPolls);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedPollId, setSelectedPollId] = useState<number | null>(null);
 
-  const pollsPerPage = 6; // 2 rows × 3 columns = 6 polls per page
+  const pollsPerPage = 6;
 
   function handlePollClick(pollId: number) {
-    console.log("Clicked poll:", pollId);
-    // later navigate to detail page
+    setSelectedPollId(pollId); // ⭐ Go to Poll Details
+  }
+
+  function handleBackToPolls() {
+    setSelectedPollId(null); // ⭐ Back to Poll List
   }
 
   const filteredPolls = polls.filter((poll) => {
@@ -39,52 +44,57 @@ export default function ClientWrapper() {
 
   const totalPages = Math.ceil(filteredPolls.length / pollsPerPage);
 
-  function handleNextPage() {
-    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-  }
-
-  function handlePrevPage() {
-    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  function handlePageChange(page: number) {
+    setCurrentPage(page);
   }
 
   function handleTabChange(tab: string) {
     setCurrentTab(tab);
-    setCurrentPage(1); // reset pagination
+    setCurrentPage(1);
   }
+
+  const selectedPoll = polls.find((poll) => poll.id === selectedPollId);
 
   return (
     <div className="container">
-      <TabNavigation onTabChange={handleTabChange} />
+      {selectedPoll ? (
+        <div className="animate-slideFadeIn">
+          <PollDetails poll={selectedPoll} onBack={handleBackToPolls} />
+        </div>
+      ) : (
+        <>
+          <TabNavigation onTabChange={handleTabChange} />
 
-      <div id="polls-list" className="mt-8">
-        {filteredPolls.length === 0 ? (
-          <div className="text-center text-gray-400">No polls available for this category.</div>
-        ) : (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fadeIn">
-              {currentPolls.map((poll) => (
-                <PollCard
-                  key={poll.id}
-                  id={poll.id}
-                  title={poll.title}
-                  status={poll.status as "Active" | "Ended"}
-                  expiration={poll.expiration}
-                  numVoters={poll.numVoters}
-                  onViewPoll={handlePollClick}
+          <div id="polls-list" className="mt-8 animate-slideFadeIn">
+            {filteredPolls.length === 0 ? (
+              <div className="text-center text-gray-400">No polls available for this category.</div>
+            ) : (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {currentPolls.map((poll) => (
+                    <PollCard
+                      key={poll.id}
+                      id={poll.id}
+                      title={poll.title}
+                      status={poll.status as "Active" | "Ended"}
+                      expiration={poll.expiration}
+                      numVoters={poll.numVoters}
+                      onViewPoll={handlePollClick}
+                    />
+                  ))}
+                </div>
+
+                {/* ⭐ Pagination */}
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
                 />
-              ))}
-            </div>
-
-            {/* ⭐ Use Pagination component */}
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={(page) => setCurrentPage(page)}
-            />
-
-          </>
-        )}
-      </div>
+              </>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 }
