@@ -4,14 +4,17 @@ import { useState, useEffect } from "react";
 import WalletConnect from "@/components/WalletConnect";
 import { ethers } from "ethers";
 
-export default function Navbar() {
+export default function Navbar({ onAccountChange }: { onAccountChange?: (account: string) => void }) {
+
   const [account, setAccount] = useState<string | null>(null);
   const [theme, setTheme] = useState("dark");
 
   const handleConnected = (account: string, provider: ethers.BrowserProvider) => {
     console.log("Connected account inside Navbar:", account);
     setAccount(account);
+    onAccountChange?.(account); // ⭐ Also inform parent
   };
+  
 
   const toggleTheme = () => {
     const newTheme = theme === "dark" ? "light" : "dark";

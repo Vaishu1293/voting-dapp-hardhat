@@ -69,7 +69,7 @@ export default function WalletConnect({
       ) : (
         <button
           onClick={connectWallet}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 shadow"
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 shadow animate-pulse-slow" // ⭐ add animate-pulse-slow here
         >
           Connect MetaMask
         </button>
@@ -77,3 +77,4 @@ export default function WalletConnect({
     </div>
   );
 }
+
