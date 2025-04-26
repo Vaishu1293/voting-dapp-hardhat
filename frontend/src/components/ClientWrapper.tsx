@@ -3,6 +3,7 @@
 import { useState } from "react";
 import TabNavigation from "@/components/TabNavigation";
 import PollCard from "./PollCard";
+import Pagination from "@/components/Pagination"; // ⭐ import the new Pagination component
 
 const dummyPolls = [
   { id: 1, title: "Favorite Color", status: "Active", expiration: "2025-05-31", numVoters: 12 },
@@ -17,30 +18,51 @@ const dummyPolls = [
 export default function ClientWrapper() {
   const [currentTab, setCurrentTab] = useState("all");
   const [polls, setPolls] = useState(dummyPolls);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const pollsPerPage = 6; // 2 rows × 3 columns = 6 polls per page
 
   function handlePollClick(pollId: number) {
     console.log("Clicked poll:", pollId);
     // later navigate to detail page
   }
 
-  // ⭐ Filter polls based on tab
   const filteredPolls = polls.filter((poll) => {
     if (currentTab === "active") return poll.status === "Active";
     if (currentTab === "past") return poll.status === "Ended";
-    return true; // "all" tab
+    return true;
   });
 
-  return (
-    <>
-      <div className="container">
-        <TabNavigation onTabChange={setCurrentTab} />
+  const indexOfLastPoll = currentPage * pollsPerPage;
+  const indexOfFirstPoll = indexOfLastPoll - pollsPerPage;
+  const currentPolls = filteredPolls.slice(indexOfFirstPoll, indexOfLastPoll);
 
-        <div id="polls-list" className="mt-8">
-          {filteredPolls.length === 0 ? (
-            <div className="text-center text-gray-400">No polls available for this category.</div>
-          ) : (
+  const totalPages = Math.ceil(filteredPolls.length / pollsPerPage);
+
+  function handleNextPage() {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  }
+
+  function handlePrevPage() {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  }
+
+  function handleTabChange(tab: string) {
+    setCurrentTab(tab);
+    setCurrentPage(1); // reset pagination
+  }
+
+  return (
+    <div className="container">
+      <TabNavigation onTabChange={handleTabChange} />
+
+      <div id="polls-list" className="mt-8">
+        {filteredPolls.length === 0 ? (
+          <div className="text-center text-gray-400">No polls available for this category.</div>
+        ) : (
+          <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fadeIn">
-              {filteredPolls.map((poll) => (
+              {currentPolls.map((poll) => (
                 <PollCard
                   key={poll.id}
                   id={poll.id}
@@ -52,9 +74,17 @@ export default function ClientWrapper() {
                 />
               ))}
             </div>
-          )}
-        </div>
+
+            {/* ⭐ Use Pagination component */}
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={(page) => setCurrentPage(page)}
+            />
+
+          </>
+        )}
       </div>
-    </>
+    </div>
   );
 }
