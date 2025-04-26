@@ -5,16 +5,15 @@ import WalletConnect from "@/components/WalletConnect";
 import { ethers } from "ethers";
 
 export default function Navbar({ onAccountChange }: { onAccountChange?: (account: string) => void }) {
-
   const [account, setAccount] = useState<string | null>(null);
   const [theme, setTheme] = useState("dark");
+  const [activeLink, setActiveLink] = useState("home");
 
   const handleConnected = (account: string, provider: ethers.BrowserProvider) => {
     console.log("Connected account inside Navbar:", account);
     setAccount(account);
-    onAccountChange?.(account); // ⭐ Also inform parent
+    onAccountChange?.(account);
   };
-  
 
   const toggleTheme = () => {
     const newTheme = theme === "dark" ? "light" : "dark";
@@ -34,13 +33,31 @@ export default function Navbar({ onAccountChange }: { onAccountChange?: (account
       <a className="navbar-brand" href="#">Voting DApp</a>
       <ul className="navbar-nav flex gap-4 items-center">
         <li className="nav-item">
-          <a className="nav-link active" href="#home">Home</a>
+          <a
+            href="#home"
+            className={`nav-link ${activeLink === "home" ? "text-red-400 font-bold" : ""}`}
+            onClick={() => setActiveLink("home")}
+          >
+            Home
+          </a>
         </li>
         <li className="nav-item">
-          <a className="nav-link" href="#create-poll">Create Poll</a>
+          <a
+            href="#create-poll"
+            className={`nav-link ${activeLink === "create-poll" ? "text-red-400 font-bold" : ""}`}
+            onClick={() => setActiveLink("create-poll")}
+          >
+            Create Poll
+          </a>
         </li>
         <li className="nav-item">
-          <a className="nav-link" href="#my-votes">My Votes</a>
+          <a
+            href="#my-votes"
+            className={`nav-link ${activeLink === "my-votes" ? "text-red-400 font-bold" : ""}`}
+            onClick={() => setActiveLink("my-votes")}
+          >
+            My Votes
+          </a>
         </li>
         <li className="nav-item">
           {account ? (
