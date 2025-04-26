@@ -5,172 +5,120 @@
 /* --- 2. Tailwind directives --- */
 @import 'tailwindcss';
 
-/* --- 3. Your custom CSS --- */
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* --- 3. Base Theme Colors --- */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  @apply font-sans text-white bg-gray-900 transition-colors duration-300 min-h-screen;
+  @apply min-h-screen font-sans transition-colors duration-300;
+  background-color: theme('colors.gray.900');
+  color: theme('colors.white');
   font-family: 'Source Sans Pro', sans-serif;
 }
 
-/* Light Theme */
-.light body {
-  @apply bg-gray-100 text-gray-900;
+body.light {
+  background-color: theme('colors.gray.100'); /* ✅ Full background becomes light */
+  color: theme('colors.gray.900');
 }
 
-/* Navbar */
+/* --- Navbar --- */
 .navbar {
   @apply sticky top-0 z-50 flex justify-between items-center p-6 shadow-md border-b bg-gray-800 text-white;
 }
-
-.light .navbar {
+body.light .navbar {
   @apply bg-purple-100 text-gray-800 border-gray-300;
 }
 
-/* Continue with your styles like navbar-brand, poll-card, form-control, etc. */
-
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  /* font-family: Arial, Helvetica, sans-serif; */
-  @apply font-sans text-white bg-gray-900 transition-colors duration-300 min-h-screen;
-  font-family: 'Source Sans Pro', sans-serif;
-}
-
-/* Light Theme */
-.light body {
-  @apply bg-gray-100 text-gray-900;
-}
-
-/* Navbar */
-.navbar {
-  @apply sticky top-0 z-50 flex justify-between items-center p-6 shadow-md border-b bg-gray-800 text-white;
-}
-
-.light .navbar {
-  @apply bg-purple-100 text-gray-800 border-gray-300;
-}
-
-/* Brand */
+/* --- Brand Text --- */
 .navbar-brand {
   @apply text-2xl font-bold text-red-400 hover:text-red-500 transition;
 }
-
-.light .navbar-brand {
+body.light .navbar-brand {
   @apply text-purple-600 hover:text-purple-700;
 }
-
-/* Buttons */
-.connect-wallet-btn, .theme-toggle-button, .view-poll-btn, .add-option-btn, .remove-option-btn, .btn-primary {
-  @apply rounded px-4 py-2 font-semibold shadow hover:-translate-y-1 transition;
-}
-
-/* Wallet Connect */
-.connect-wallet-btn {
-  @apply bg-red-400 text-white hover:bg-red-500;
-}
-
-.light .connect-wallet-btn {
-  @apply bg-purple-600 hover:bg-purple-700;
-}
-
-/* Theme Toggle */
-.theme-toggle-button {
-  @apply bg-gray-600 text-white hover:bg-gray-700;
-}
-
-.light .theme-toggle-button {
-  @apply bg-gray-200 text-gray-700 hover:bg-white;
-}
-
 /* Poll Card */
 .poll-card {
   @apply rounded-lg border p-6 shadow-md bg-gray-800 border-gray-700 hover:shadow-lg hover:-translate-y-2 transition;
 }
-
-.light .poll-card {
-  @apply bg-white border-gray-200;
+body.light .poll-card {
+  @apply bg-white border-gray-300 hover:shadow-lg;
 }
 
 /* Poll Title */
 .poll-title {
-  @apply text-xl font-semibold mb-2 text-red-400;
+  @apply text-xl font-semibold mb-2 text-white;
 }
-
-.light .poll-title {
-  @apply text-gray-700;
+body.light .poll-title {
+  @apply text-gray-800;
 }
 
 /* Poll Status */
 .poll-status.active {
   @apply text-green-400 font-bold;
 }
-
 .poll-status.ended {
   @apply text-red-400 font-bold;
 }
+body.light .poll-status.active {
+  @apply text-green-600;
+}
+body.light .poll-status.ended {
+  @apply text-red-600;
+}
 
-/* Input + Form */
+/* Poll Detail */
+.poll-detail {
+  @apply text-sm text-gray-400;
+}
+body.light .poll-detail {
+  @apply text-gray-600;
+}
+
+/* Poll Button */
+.view-poll-btn {
+  @apply w-full py-2 rounded-md text-white font-semibold bg-purple-500 hover:bg-purple-600 transition duration-300;
+}
+body.light .view-poll-btn {
+  @apply text-white bg-purple-600 hover:bg-purple-700;
+}
+
+
+/* --- Buttons --- */
+.connect-wallet-btn, .theme-toggle-button, .view-poll-btn, .add-option-btn, .remove-option-btn, .btn-primary {
+  @apply rounded px-4 py-2 font-semibold shadow hover:-translate-y-1 transition;
+}
+.connect-wallet-btn {
+  @apply bg-red-400 text-white hover:bg-red-500;
+}
+body.light .connect-wallet-btn {
+  @apply bg-purple-600 hover:bg-purple-700;
+}
+.theme-toggle-button {
+  @apply bg-gray-600 text-white hover:bg-gray-700;
+}
+body.light .theme-toggle-button {
+  @apply bg-gray-200 text-gray-700 hover:bg-white;
+}
+
+/* --- Form Inputs --- */
 .form-control, .option-input {
   @apply w-full px-4 py-2 rounded border bg-gray-800 border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-red-400;
 }
-
-.light .form-control, .light .option-input {
+body.light .form-control, body.light .option-input {
   @apply bg-white border-gray-300 text-gray-800 focus:ring-purple-500;
 }
 
-/* Poll Options */
-.option-group {
-  @apply flex items-center mb-4;
-}
-
-/* No Poll Message */
+/* --- No Polls Message --- */
 .no-polls-message {
   @apply text-center p-6 rounded bg-gray-800 text-gray-400 border border-gray-700;
 }
-
-.light .no-polls-message {
+body.light .no-polls-message {
   @apply bg-white text-gray-600 border-gray-300;
 }
 
-/* Container */
+/* --- Container --- */
 .container {
   @apply max-w-7xl mx-auto p-6;
 }
 
+/* --- Animation --- */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -178,4 +126,3 @@ body {
 .animate-fadeIn {
   animation: fadeIn 0.5s ease-in-out;
 }
-
