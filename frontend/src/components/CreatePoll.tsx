@@ -18,11 +18,15 @@ export default function CreatePoll() {
     };
 
     const removeOption = (index: number) => {
-        if (options.length > 2) {
-            setOptions(prevOptions => prevOptions.filter((_, idx) => idx !== index));
+        if (options.length <= 2) {
+            alert("At least 2 options are required to create a poll.");
+            return;
         }
-    };
 
+        const newOptions = [...options];
+        newOptions.splice(index, 1); // Remove the clicked option
+        setOptions(newOptions);
+    };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -35,10 +39,9 @@ export default function CreatePoll() {
             <h2 className="text-3xl font-bold text-center mt-4 text-white dark:text-gray-900 animate-fadeIn animate-delay-300">
                 Create a New Poll
             </h2>
-
-            <form onSubmit={handleSubmit} className="space-y-8"> {/* Slightly bigger space between sections */}
+            <form onSubmit={handleSubmit} className="space-y-8">
                 <div>
-                    <label className="text-base font-semibold text-gray-800 dark:text-white mb-2 block">
+                    <label className="create-poll-label">
                         Poll Title
                     </label>
                     <input
@@ -52,11 +55,11 @@ export default function CreatePoll() {
                 </div>
 
                 <div>
-                    <label className="text-base font-semibold text-gray-800 dark:text-white mb-2 block">
+                    <label className="create-poll-label">
                         Poll Options
                     </label>
                     {options.map((option, index) => (
-                        <div key={index} className="flex gap-2 mb-4"> {/* More bottom margin */}
+                        <div key={index} className="flex gap-2 mb-4">
                             <input
                                 type="text"
                                 value={option}
@@ -74,6 +77,7 @@ export default function CreatePoll() {
                                     ✕
                                 </button>
                             )}
+
                         </div>
                     ))}
                     <button
@@ -86,14 +90,13 @@ export default function CreatePoll() {
                 </div>
 
                 <div>
-                    <label className="text-base font-semibold text-gray-800 dark:text-white mb-2 block">
+                    <label className="create-poll-label">
                         Expiration Date
                     </label>
                     <input
                         type="date"
                         value={expiration}
                         onChange={(e) => setExpiration(e.target.value)}
-                        placeholder="dd/mmy/yyyy"
                         required
                         className="form-control"
                     />

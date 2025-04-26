@@ -124,13 +124,39 @@ body.light .no-polls-message {
   @apply max-w-7xl mx-auto p-6;
 }
 
+/* --- Create Poll Title (Heading) --- */
+.create-poll-title {
+  @apply text-3xl font-bold text-center mt-4 mb-8 text-white dark:text-gray-900;
+}
+body.light .create-poll-title {
+  @apply text-gray-900;
+}
+
+/* --- Form Labels --- */
+.create-poll-label {
+  @apply text-base font-semibold mb-2 block text-white;
+}
+body.light .create-poll-label {
+  @apply text-gray-800;
+}
+
+/* --- Form Control Inputs (Already exists for reuse) --- */
+.form-control {
+  @apply w-full px-4 py-2 rounded border bg-gray-800 border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-red-400;
+}
+body.light .form-control {
+  @apply bg-white border-gray-300 text-gray-800 focus:ring-purple-500;
+}
+
+/* --- Buttons (Add, Remove, Create Poll Button) Already exist --- */
+.add-option-btn, .remove-option-btn, .btn-primary {
+  @apply rounded px-4 py-2 font-semibold shadow hover:-translate-y-1 transition;
+}
+
 /* --- Animation --- */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
-}
-.animate-fadeIn {
-  animation: fadeIn 0.5s ease-in-out;
 }
 
 @keyframes slideFadeIn {
